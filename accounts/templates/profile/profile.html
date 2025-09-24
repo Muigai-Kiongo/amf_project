@@ -1,0 +1,73 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container">
+    <div class='profile-main-content'>
+        <h1 class="profile-title">User Profile</h1>
+        <h3 class="profile-subtitle">Your Information</h3>
+        <p class="profile-info"><strong>Username:</strong> {{ form.username.value }}</p>
+        <p class="profile-info"><strong>Email:</strong> {{ form.email.value }}</p>
+        <form method="post" class="profile-form-container">
+            {% csrf_token %}
+            <h2 class="profile-form-title">Edit Profile</h2>
+            {% if form.non_field_errors %}
+                <div class="profile-error-message">{{ form.non_field_errors }}</div>
+            {% endif %}
+            {% for field in form %}
+                <div class="profile-form-group">
+                    <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                    {{ field }}
+                    {% if field.errors %}
+                        <div class="profile-error-message">{{ field.errors }}</div>
+                    {% endif %}
+                </div>
+            {% endfor %}
+            <button type="submit" class="profile-btn">Save Changes</button>
+        </form>
+    </div>
+</div>
+<style>
+    .container { display: flex; gap: 20px; justify-content: center; margin-top: 2rem; margin-bottom: 2rem; }
+    .profile-main-content {
+        flex: 1; max-width: 480px; margin-left: 20px; padding: 28px 24px;
+        background-color: #f9f9f9; border-radius: 12px;
+        box-shadow: 0 2px 12px rgba(0, 0, 0, 0.09);
+        transition: box-shadow 0.3s, background 0.3s, color 0.3s;
+    }
+    .profile-title { font-size: 2rem; margin-bottom: 0.5rem; color: #007bff; }
+    .profile-subtitle { font-size: 1.17rem; color: #444; margin-bottom: 1.2rem; }
+    .profile-info { font-size: 1.08rem; margin-bottom: 0.2rem; color: #222; }
+    .profile-form-title { margin-top: 2rem; margin-bottom: 0.8rem; font-size: 1.1rem; font-weight: 600; color: #005fa3; }
+    .profile-form-group { margin-bottom: 15px; display: flex; flex-direction: column; gap: 2px; }
+    .profile-form-group label { font-weight: 500; margin-bottom: 2px; }
+    .profile-form-group input, .profile-form-group select, .profile-form-group textarea {
+        padding: 8px 7px; border-radius: 5px; border: 1px solid #bbb; font-size: 1rem;
+    }
+    .profile-form-group input:focus, .profile-form-group select:focus, .profile-form-group textarea:focus {
+        border-color: #007bff; outline: none;
+    }
+    .profile-error-message { color: #d82c2c; font-size: 0.9em; margin-top: 4px; }
+    .profile-btn {
+        background-color: #007bff; color: white; padding: 11px 0; border: none; border-radius: 6px;
+        cursor: pointer; font-size: 1.08rem; font-weight: 600; margin-top: 8px; transition: background-color 0.3s; width: 100%;
+    }
+    .profile-btn:hover { background-color: #005fa3; }
+    body.dark-mode .profile-main-content { background: #232a35 !important; color: #e0e6f3 !important; box-shadow: 0 2px 12px rgba(20,28,45,0.15); }
+    body.dark-mode .profile-title { color: #7ab8ff !important; }
+    body.dark-mode .profile-subtitle { color: #b0cafc !important; }
+    body.dark-mode .profile-info { color: #e0e6f3 !important; }
+    body.dark-mode .profile-form-title { color: #7ab8ff !important; }
+    body.dark-mode .profile-form-group label { color: #b0cafc !important; }
+    body.dark-mode .profile-form-group input,
+    body.dark-mode .profile-form-group select,
+    body.dark-mode .profile-form-group textarea {
+        background: #181e26 !important; color: #e0e6f3 !important; border: 1px solid #3a4e6e !important;
+    }
+    body.dark-mode .profile-btn { background-color: #7ab8ff; color: #202b3a; }
+    body.dark-mode .profile-btn:hover { background-color: #589be6; }
+    body.dark-mode .profile-error-message { color: #ff8b8b; }
+    @media (max-width: 700px) {
+        .container { flex-direction: column; margin-left: 0; margin-right: 0; padding: 0 0.5rem; }
+        .profile-main-content { margin-left: 0; padding: 14px 8px; }
+    }
+</style>
+{% endblock %}

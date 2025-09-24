@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Register - Real-Time Weather Forecasting</title>
+    <style>
+        /* Reset */
+        *, *::before, *::after {
+            box-sizing: border-box;
+        }
+
+        /* Background image and overlay */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            height: 100vh;
+            display: grid;
+            place-items: center;
+            color: #333;
+            background: 
+                linear-gradient(rgba(255, 255, 255, 0.85), rgba(255, 255, 255, 0.85)),
+                url('https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1470&q=80') no-repeat center center fixed;
+            background-size: cover;
+        }
+
+        main {
+            width: 100%;
+            max-width: 360px;
+            padding: 1.5rem;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+            text-align: center;
+        }
+
+        h1.welcome-message {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            color: #222;
+            letter-spacing: 0.5px;
+        }
+
+        form h2 {
+            margin-bottom: 1.25rem;
+            font-weight: 600;
+            color: #444;
+        }
+
+        form p {
+            margin: 0.75rem 0;
+            text-align: left;
+        }
+
+        form label {
+            display: block;
+            margin-bottom: 0.25rem;
+            font-weight: 500;
+            color: #555;
+        }
+
+        form input[type="text"],
+        form input[type="email"],
+        form input[type="password"] {
+            width: 100%;
+            padding: 0.5rem 0.75rem;
+            margin-bottom: 1rem;
+            border: 1.5px solid #ccc;
+            border-radius: 6px;
+            font-size: 1rem;
+            transition: border-color 0.3s;
+        }
+
+        form input[type="text"]:focus,
+        form input[type="email"]:focus,
+        form input[type="password"]:focus {
+            border-color: #007bff;
+            outline: none;
+            box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+        }
+
+        form button {
+            width: 100%;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 0.75rem;
+            border-radius: 6px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            font-weight: 600;
+            transition: background-color 0.3s ease;
+        }
+
+        form button:hover,
+        form button:focus {
+            background-color: #0056b3;
+            outline: none;
+        }
+
+        form p a {
+            color: #007bff;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        form p a:hover,
+        form p a:focus {
+            text-decoration: underline;
+            outline: none;
+        }
+
+        .error-messages {
+            color: #d93025;
+            background-color: #fce8e6;
+            border: 1px solid #d93025;
+            padding: 0.75rem 1rem;
+            border-radius: 6px;
+            margin-bottom: 1rem;
+            text-align: left;
+            font-size: 0.9rem;
+            list-style-type: none;
+        }
+
+        .error-messages li {
+            margin-bottom: 0.25rem;
+        }
+
+        .extra-links {
+            margin-top: 1rem;
+            font-size: 0.9rem;
+            color: #666;
+            text-align: center;
+        }
+
+        .extra-links a {
+            margin-left: 0.25rem;
+        }
+    </style>
+</head>
+<body>
+    <main role="main" aria-labelledby="register-heading">
+        <h1 id="register-heading" class="welcome-message" aria-live="polite">
+            Welcome, create an Account to get started!
+        </h1>
+        <form method="post" novalidate>
+            {% csrf_token %}
+            <h2>Register</h2>
+
+            {% if form.errors %}
+                <ul class="error-messages" role="alert" aria-live="assertive">
+                    {% for field in form %}
+                        {% for error in field.errors %}
+                            <li>{{ error }}</li>
+                        {% endfor %}
+                    {% endfor %}
+                    {% for error in form.non_field_errors %}
+                        <li>{{ error }}</li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+
+            <p>
+                <label for="{{ form.username.id_for_label }}">{{ form.username.label }}</label>
+                {{ form.username }}
+            </p>
+            <p>
+                <label for="{{ form.password1.id_for_label }}">{{ form.password1.label }}</label>
+                {{ form.password1 }}
+            </p>
+            <p>
+                <label for="{{ form.password2.id_for_label }}">{{ form.password2.label }}</label>
+                {{ form.password2 }}
+            </p>
+
+            <button type="submit" aria-label="Submit registration form">Register</button>
+
+            <p class="extra-links">
+                Already have an Account?
+                <a href="{% url 'login' %}">Sign In</a>
+            </p>
+        </form>
+    </main>
+</body>
+</html>
