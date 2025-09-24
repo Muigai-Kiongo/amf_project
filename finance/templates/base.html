@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}AMF Finance App{% endblock %}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- Bootstrap 5 CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+    <!-- FontAwesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <style>
+        body {
+            background-color: #f7f9fb;
+        }
+        .navbar-brand {
+            font-weight: bold;
+            letter-spacing: 1px;
+        }
+        footer {
+            margin-top: 60px;
+            padding: 20px 0;
+            background: #212529;
+            color: #fff;
+            text-align: center;
+        }
+        /* Responsive tweaks */
+        @media (max-width: 576px) {
+            .navbar .btn {
+                margin-bottom: 8px;
+            }
+        }
+    </style>
+    {% block extra_head %}{% endblock %}
+</head>
+<body>
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-4 shadow-sm">
+    <div class="container">
+        <a class="navbar-brand" href="{% url 'dashboard' %}">
+            <i class="fa-solid fa-coins text-warning"></i> AMF Finance
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNavbar" aria-controls="mainNavbar" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="mainNavbar">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                <li class="nav-item"><a class="nav-link" href="{% url 'dashboard' %}"><i class="fa-solid fa-gauge"></i> Dashboard</a></li>
+                <li class="nav-item"><a class="nav-link" href="{% url 'goal-list' %}"><i class="fa-solid fa-bullseye"></i> Goals</a></li>
+                <li class="nav-item"><a class="nav-link" href="{% url 'budget-list' %}"><i class="fa-solid fa-wallet"></i> Budgets</a></li>
+                <li class="nav-item"><a class="nav-link" href="{% url 'transaction-list' %}"><i class="fa-solid fa-arrows-rotate"></i> Transactions</a></li>
+                <li class="nav-item"><a class="nav-link" href="{% url 'category-list' %}"><i class="fa-solid fa-tags"></i> Categories</a></li>
+            </ul>
+            <span class="navbar-text me-3">
+                {% if user.is_authenticated %}
+                    <i class="fa-solid fa-user-circle"></i> {{ user.username }}
+                {% endif %}
+            </span>
+            {% if user.is_authenticated %}
+                <a class="btn btn-outline-light btn-sm" href="{% url 'logout' %}">
+                    <i class="fa-solid fa-sign-out-alt"></i> Logout
+                </a>
+            {% else %}
+                <a class="btn btn-outline-success btn-sm" href="{% url 'login' %}">
+                    <i class="fa-solid fa-sign-in-alt"></i> Login
+                </a>
+            {% endif %}
+        </div>
+    </div>
+</nav>
+
+<div class="container mt-3">
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        {% endfor %}
+    {% endif %}
+    {% block content %}
+    {% endblock %}
+</div>
+
+
+
+<!-- Bootstrap 5 JS and dependencies -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+{% block extra_js %}{% endblock %}
+</body>
+</html>

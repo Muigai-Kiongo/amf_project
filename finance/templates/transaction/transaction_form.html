@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% block title %}Transaction Form{% endblock %}
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-7 col-lg-6">
+        <div class="card shadow-sm">
+            <div class="card-header bg-info text-white">
+                <h4 class="mb-0">
+                    <i class="fa-solid fa-arrows-rotate"></i>
+                    {% if object %}Edit Transaction{% else %}Create Transaction{% endif %}
+                </h4>
+            </div>
+            <div class="card-body">
+                <form method="post" novalidate>
+                    {% csrf_token %}
+                    {{ form.as_p }}
+                    <div class="d-flex justify-content-between mt-3">
+                        <button type="submit" class="btn btn-success">
+                            <i class="fa-solid fa-save"></i> Save
+                        </button>
+                        <a href="{% url 'transaction-list' %}" class="btn btn-secondary">
+                            <i class="fa-solid fa-arrow-left"></i> Cancel
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

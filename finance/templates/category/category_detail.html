@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block title %}Category Details{% endblock %}
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-7 col-lg-6">
+        <div class="card shadow-sm mb-4">
+            <div class="card-header bg-info text-white d-flex align-items-center">
+                <i class="fa-solid fa-tag fa-lg me-2"></i>
+                <h2 class="mb-0" style="font-size: 1.5rem;">{{ object.name }}</h2>
+            </div>
+            <div class="card-body">
+                <p>
+                    <strong><i class="fa-solid fa-layer-group"></i> Type:</strong>
+                    <span class="badge {% if object.category_type == 'income' %}bg-success{% else %}bg-danger{% endif %} fs-6">
+                        {{ object.get_category_type_display }}
+                    </span>
+                </p>
+            </div>
+            <div class="card-footer text-end">
+                <a href="{% url 'category-update' object.pk %}" class="btn btn-warning me-2">
+                    <i class="fa-solid fa-pen"></i> Edit
+                </a>
+                <a href="{% url 'category-delete' object.pk %}" class="btn btn-danger me-2">
+                    <i class="fa-solid fa-trash"></i> Delete
+                </a>
+                <a href="{% url 'category-list' %}" class="btn btn-secondary">
+                    <i class="fa-solid fa-arrow-left"></i> Back to List
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

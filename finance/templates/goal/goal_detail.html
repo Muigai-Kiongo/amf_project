@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+{% block title %}Goal Details{% endblock %}
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8 col-lg-7">
+        <div class="card shadow-sm mb-4">
+            <div class="card-header bg-success text-white d-flex align-items-center">
+                <i class="fa-solid fa-bullseye fa-lg me-2"></i>
+                <h2 class="mb-0" style="font-size: 1.6rem;">{{ object.name }}</h2>
+            </div>
+            <div class="card-body">
+                <p>
+                    <strong><i class="fa-solid fa-flag-checkered"></i> Target amount:</strong>
+                    <span class="badge bg-primary fs-6">{{ object.target_amount|floatformat:2 }} KES</span>
+                </p>
+                <p>
+                    <strong><i class="fa-solid fa-piggy-bank"></i> Current amount:</strong>
+                    <span class="badge bg-info text-dark fs-6">{{ object.current_amount|floatformat:2 }} KES</span>
+                </p>
+                <p>
+                    <strong><i class="fa-solid fa-calendar-day"></i> Deadline:</strong>
+                    <span class="badge bg-secondary">{{ object.deadline }}</span>
+                </p>
+                <p>
+                    <strong><i class="fa-solid fa-chart-line"></i> Progress:</strong>
+                </p>
+                <div class="progress mb-2" style="height: 28px;">
+                    <div
+                        class="progress-bar {% if object.progress_percent == 100 %}bg-success{% elif object.progress_percent > 60 %}bg-info{% elif object.progress_percent > 30 %}bg-warning{% else %}bg-danger{% endif %}"
+                        role="progressbar"
+                        style="width: {{ object.progress_percent|floatformat:0 }}%; font-size: 1.1rem;"
+                        aria-valuenow="{{ object.progress_percent|floatformat:0 }}"
+                        aria-valuemin="0"
+                        aria-valuemax="100"
+                    >
+                        {{ object.progress_percent|floatformat:0 }}%
+                    </div>
+                </div>
+            </div>
+            <div class="card-footer text-end">
+                <a href="{% url 'goal-update' object.pk %}" class="btn btn-warning me-2">
+                    <i class="fa-solid fa-pen"></i> Edit
+                </a>
+                <a href="{% url 'goal-delete' object.pk %}" class="btn btn-danger me-2">
+                    <i class="fa-solid fa-trash"></i> Delete
+                </a>
+                <a href="{% url 'goal-list' %}" class="btn btn-secondary">
+                    <i class="fa-solid fa-arrow-left"></i> Back to List
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
