@@ -51,13 +51,17 @@
             </ul>
             <span class="navbar-text me-3">
                 {% if user.is_authenticated %}
+                <a class="btn btn-outline-light btn-sm" href="{% url 'profile' %}">
                     <i class="fa-solid fa-user-circle"></i> {{ user.username }}
+                </a>
                 {% endif %}
             </span>
             {% if user.is_authenticated %}
-                <a class="btn btn-outline-light btn-sm" href="{% url 'logout' %}">
-                    <i class="fa-solid fa-sign-out-alt"></i> Logout
-                </a>
+                <form class="btn btn-outline-light btn-sm" action="{% url 'logout' %}" method="post">
+                    {% csrf_token %}
+                    <i class="fa-solid fa-arrow-right-from-bracket"></i> 
+                    <button type="submit">Logout</button>
+                </form>
             {% else %}
                 <a class="btn btn-outline-success btn-sm" href="{% url 'login' %}">
                     <i class="fa-solid fa-sign-in-alt"></i> Login
