@@ -3,14 +3,11 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Login - AMF </title>
+    <title>Login - AMF</title>
+    <!-- Bootstrap 5 CSS and FontAwesome (for consistency with theme) -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <style>
-        /* Reset */
-        *, *::before, *::after {
-            box-sizing: border-box;
-        }
-
-        /* Background image and overlay */
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             margin: 0;
@@ -19,98 +16,97 @@
             place-items: center;
             color: #333;
             background: 
-                linear-gradient(rgba(255, 255, 255, 0.85), rgba(255, 255, 255, 0.85)),
+                linear-gradient(rgba(33, 37, 41, 0.72), rgba(33, 37, 41, 0.82)),
                 url('https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1470&q=80') no-repeat center center fixed;
             background-size: cover;
         }
-
         main {
             width: 100%;
-            max-width: 360px;
-            padding: 1.5rem;
-            background: rgba(255, 255, 255, 0.95);
-            border-radius: 10px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+            max-width: 370px;
+            padding: 2rem 1.5rem 1.5rem 1.5rem;
+            background: rgba(255,255,255,0.96);
+            border-radius: 12px;
+            box-shadow: 0 8px 30px rgba(33,37,41,0.20);
             text-align: center;
+            position: relative;
         }
-
         .typewriter {
             font-size: 2rem;
-            font-weight: 600;
+            font-weight: 700;
             margin-bottom: 1.5rem;
-            color: #222;
+            color: #212529;
             letter-spacing: 1px;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
-
+        .typewriter i {
+            color: #ffc107;
+            margin-right: 0.5rem;
+        }
         form h2 {
-            margin-bottom: 1.25rem;
+            margin-bottom: 1.2rem;
             font-weight: 600;
-            color: #444;
+            color: #007bff;
+            font-size: 1.3rem;
         }
-
         form p {
             margin: 0.75rem 0;
             text-align: left;
         }
-
         form label {
             display: block;
             margin-bottom: 0.25rem;
             font-weight: 500;
             color: #555;
         }
-
         form input[type="text"],
         form input[type="email"],
         form input[type="password"] {
             width: 100%;
             padding: 0.5rem 0.75rem;
             margin-bottom: 1rem;
-            border: 1.5px solid #ccc;
+            border: 1.5px solid #ced4da;
             border-radius: 6px;
             font-size: 1rem;
+            background: #f8fafc;
             transition: border-color 0.3s;
         }
-
         form input[type="text"]:focus,
         form input[type="email"]:focus,
         form input[type="password"]:focus {
             border-color: #007bff;
             outline: none;
-            box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+            box-shadow: 0 0 5px rgba(0, 123, 255, 0.22);
+            background: #fff;
         }
-
         form button {
             width: 100%;
-            background-color: #007bff;
+            background: linear-gradient(90deg,#007bff 60%,#ffc107 100%);
             color: white;
             border: none;
-            padding: 0.75rem;
+            padding: 0.8rem;
             border-radius: 6px;
-            font-size: 1.1rem;
+            font-size: 1.08rem;
             cursor: pointer;
             font-weight: 600;
-            transition: background-color 0.3s ease;
+            transition: background 0.3s ease;
+            letter-spacing: 1px;
+            box-shadow: 0 2px 8px rgba(0,123,255,0.10);
         }
-
         form button:hover,
         form button:focus {
-            background-color: #0056b3;
+            background: linear-gradient(90deg,#0056b3 60%,#ffca2c 100%);
             outline: none;
         }
-
         form p a {
             color: #007bff;
             text-decoration: none;
             font-weight: 500;
         }
-
         form p a:hover,
         form p a:focus {
             text-decoration: underline;
             outline: none;
         }
-
         .error-messages {
             color: #d93025;
             background-color: #fce8e6;
@@ -121,30 +117,52 @@
             text-align: left;
             font-size: 0.9rem;
         }
-
         .error-messages ul {
             margin: 0;
             padding-left: 1.25rem;
         }
-
         .extra-links {
             margin-top: 1rem;
-            font-size: 0.9rem;
-            color: #666;
+            font-size: 0.95rem;
+            color: #444;
         }
-
+        .extra-links i {
+            color: #ffc107;
+            margin-right: 3px;
+        }
         .extra-links a {
             margin-left: 0.25rem;
+            color: #007bff;
+        }
+        .django-messages {
+            margin-bottom: 1rem;
+        }
+        @media (max-width: 575px) {
+            main {
+                max-width: 98vw;
+                padding: 1rem 0.5rem;
+            }
         }
     </style>
 </head>
 <body>
     <main role="main" aria-labelledby="login-heading">
-        <h1 id="login-heading" class="typewriter" aria-live="polite">Welcome Back</h1>
+        <h1 id="login-heading" class="typewriter" aria-live="polite">
+            <i class="fa-solid fa-coins"></i> Welcome Back
+        </h1>
+        {% if messages %}
+            <div class="django-messages">
+                {% for message in messages %}
+                    <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                        {{ message }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
         <form method="post" novalidate>
             {% csrf_token %}
-            <h2>Login</h2>
-
+            <h2><i class="fa-solid fa-sign-in-alt"></i> Login</h2>
             {% if form.errors %}
                 <div class="error-messages" role="alert" aria-live="assertive">
                     <ul>
@@ -159,18 +177,20 @@
                     </ul>
                 </div>
             {% endif %}
-
             {{ form.as_p }}
-
-            <button type="submit" aria-label="Submit login form">Login</button>
-
+            <button type="submit" aria-label="Submit login form">
+                <i class="fa-solid fa-arrow-right-to-bracket"></i> Login
+            </button>
             <p class="extra-links">
-                Don't have an account?
+                <i class="fa-solid fa-user-plus"></i> Don't have an account?
                 <a href="{% url 'register' %}">Register</a>
             </p>
-
-           
+            <p class="extra-links">
+                <i class="fa-solid fa-unlock"></i> 
+                <a href="{% url 'password_reset' %}">Forgot password?</a>
+            </p>
         </form>
     </main>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

@@ -1,0 +1,163 @@
+{% extends "base.html" %}
+{% load humanize %}
+{% block title %}Finance Reports{% endblock %}
+{% block extra_head %}
+<!-- Chart.js for graphical reports -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+{% endblock %}
+{% block content %}
+<div class="max-w-7xl mx-auto py-8">
+    <h1 class="text-3xl font-bold mb-8 text-gray-800">Finance Reports</h1>
+
+    <!-- Chart Row -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+        <div class="bg-white rounded-lg shadow p-6 flex flex-col items-center">
+            <h2 class="font-semibold text-lg text-gray-700 mb-2"><i class="fa-solid fa-chart-pie text-yellow-500"></i> Income vs Expense</h2>
+            <canvas id="incomeExpenseChart" width="180" height="180"></canvas>
+        </div>
+        <div class="bg-white rounded-lg shadow p-6 flex flex-col items-center">
+            <h2 class="font-semibold text-lg text-gray-700 mb-2"><i class="fa-solid fa-building-columns text-blue-500"></i> Account Balances</h2>
+            <canvas id="accountBalanceChart" width="180" height="180"></canvas>
+        </div>
+        <div class="bg-white rounded-lg shadow p-6 flex flex-col items-center">
+            <h2 class="font-semibold text-lg text-gray-700 mb-2"><i class="fa-solid fa-bullseye text-green-500"></i> Goal Progress</h2>
+            <canvas id="goalProgressChart" width="180" height="180"></canvas>
+        </div>
+    </div>
+
+    <!-- Transactions Summary -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+        <div class="bg-white rounded-lg shadow p-6">
+            <h2 class="font-semibold text-lg text-gray-700 mb-2"><i class="fa-solid fa-arrow-up-right-dots text-green-500"></i> Total Income</h2>
+            <span class="font-mono text-green-700 text-xl">{{ total_income|floatformat:2|intcomma }} KES</span>
+        </div>
+        <div class="bg-white rounded-lg shadow p-6">
+            <h2 class="font-semibold text-lg text-gray-700 mb-2"><i class="fa-solid fa-arrow-down-wide-short text-red-500"></i> Total Expense</h2>
+            <span class="font-mono text-red-700 text-xl">{{ total_expense|floatformat:2|intcomma }} KES</span>
+        </div>
+        <div class="bg-white rounded-lg shadow p-6">
+            <h2 class="font-semibold text-lg text-gray-700 mb-2"><i class="fa-solid fa-list-ol text-blue-500"></i> Total Transactions</h2>
+            <span class="font-mono text-blue-700 text-xl">{{ total_transactions|intcomma }}</span>
+        </div>
+    </div>
+
+    <!-- Account Summaries -->
+    <div class="mb-10">
+        <h2 class="text-2xl font-semibold text-gray-800 mb-4">Accounts Overview</h2>
+        <div class="overflow-x-auto">
+            <table class="min-w-full bg-white rounded-lg shadow">
+                <thead class="bg-gray-100">
+                    <tr>
+                        <th class="py-3 px-4 text-left font-semibold text-gray-700">Account</th>
+                        <th class="py-3 px-4 text-left font-semibold text-gray-700">Balance</th>
+                        <th class="py-3 px-4 text-left font-semibold text-gray-700">Income</th>
+                        <th class="py-3 px-4 text-left font-semibold text-gray-700">Expense</th>
+                        <th class="py-3 px-4 text-left font-semibold text-gray-700">Goals</th>
+                    </tr>
+                </thead>
+                <tbody>
+                {% for summary in account_summaries %}
+                    <tr class="border-t">
+                        <td class="py-2 px-4">{{ summary.account.name }}</td>
+                        <td class="py-2 px-4 font-mono">{{ summary.balance|floatformat:2|intcomma }} KES</td>
+                        <td class="py-2 px-4 font-mono text-green-700">{{ summary.income|floatformat:2|intcomma }}</td>
+                        <td class="py-2 px-4 font-mono text-red-700">{{ summary.expense|floatformat:2|intcomma }}</td>
+                        <td class="py-2 px-4">{{ summary.goal_count }}</td>
+                    </tr>
+                {% empty %}
+                    <tr>
+                        <td colspan="5" class="py-4 px-4 text-center text-gray-400">No accounts found.</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Goal Summaries -->
+    <div class="mb-10">
+        <h2 class="text-2xl font-semibold text-gray-800 mb-4">Goals Overview</h2>
+        <div class="overflow-x-auto">
+            <table class="min-w-full bg-white rounded-lg shadow">
+                <thead class="bg-gray-100">
+                    <tr>
+                        <th class="py-3 px-4 text-left font-semibold text-gray-700">Goal</th>
+                        <th class="py-3 px-4 text-left font-semibold text-gray-700">Account</th>
+                        <th class="py-3 px-4 text-left font-semibold text-gray-700">Current Amount</th>
+                        <th class="py-3 px-4 text-left font-semibold text-gray-700">Target Amount</th>
+                        <th class="py-3 px-4 text-left font-semibold text-gray-700">Deposits</th>
+                        <th class="py-3 px-4 text-left font-semibold text-gray-700">Withdrawals</th>
+                        <th class="py-3 px-4 text-left font-semibold text-gray-700">Progress (%)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                {% for summary in goal_summaries %}
+                    <tr class="border-t">
+                        <td class="py-2 px-4">{{ summary.goal.name }}</td>
+                        <td class="py-2 px-4">{{ summary.account.name }}</td>
+                        <td class="py-2 px-4 font-mono">{{ summary.current_amount|floatformat:2|intcomma }} KES</td>
+                        <td class="py-2 px-4 font-mono">{{ summary.target_amount|floatformat:2|intcomma }} KES</td>
+                        <td class="py-2 px-4 font-mono text-blue-700">{{ summary.deposit|floatformat:2|intcomma }}</td>
+                        <td class="py-2 px-4 font-mono text-yellow-700">{{ summary.withdraw|floatformat:2|intcomma }}</td>
+                        <td class="py-2 px-4 font-mono">{{ summary.progress_percent|floatformat:2 }}%</td>
+                    </tr>
+                {% empty %}
+                    <tr>
+                        <td colspan="7" class="py-4 px-4 text-center text-gray-400">No goals found.</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    const totalIncome = {{ total_income|floatformat:2 }};
+    const totalExpense = {{ total_expense|floatformat:2 }};
+    const accountNames = [{% for summary in account_summaries %}"{{ summary.account.name }}"{% if not forloop.last %},{% endif %}{% endfor %}];
+    const accountBalances = [{% for summary in account_summaries %}{{ summary.balance|floatformat:2 }}{% if not forloop.last %},{% endif %}{% endfor %}];
+    const goalNames = [{% for summary in goal_summaries %}"{{ summary.goal.name }}"{% if not forloop.last %},{% endif %}{% endfor %}];
+    const goalProgress = [{% for summary in goal_summaries %}{{ summary.progress_percent|floatformat:2 }}{% if not forloop.last %},{% endif %}{% endfor %}];
+
+    new Chart(document.getElementById('incomeExpenseChart'), {
+        type: 'doughnut',
+        data: {
+            labels: ['Income', 'Expense'],
+            datasets: [{
+                data: [totalIncome, totalExpense],
+                backgroundColor: ['#16a34a', '#dc2626'],
+            }]
+        },
+        options: { plugins: { legend: { display: true } } }
+    });
+
+    new Chart(document.getElementById('accountBalanceChart'), {
+        type: 'bar',
+        data: {
+            labels: accountNames,
+            datasets: [{
+                label: 'Balance (KES)',
+                data: accountBalances,
+                backgroundColor: '#2563eb'
+            }]
+        },
+        options: { plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true } } }
+    });
+
+    new Chart(document.getElementById('goalProgressChart'), {
+        type: 'bar',
+        data: {
+            labels: goalNames,
+            datasets: [{
+                label: 'Progress (%)',
+                data: goalProgress,
+                backgroundColor: '#22c55e'
+            }]
+        },
+        options: { plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true, max: 100 } } }
+    });
+</script>
+{% endblock %}

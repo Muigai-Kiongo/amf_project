@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% block title %}Account Form{% endblock %}
+{% block content %}
+<div class="max-w-lg mx-auto mt-8 bg-white rounded-lg shadow p-8">
+    <h2 class="text-xl font-bold mb-6 text-gray-800">{{ title|default:"Create/Edit Account" }}</h2>
+    <form method="post">
+        {% csrf_token %}
+        {% for field in form %}
+            <div class="mb-4">
+                <label for="{{ field.id_for_label }}" class="block text-gray-700 font-medium mb-2">{{ field.label }}</label>
+                {{ field }}
+                {% if field.help_text %}
+                <p class="text-gray-500 text-xs">{{ field.help_text }}</p>
+                {% endif %}
+                {% for error in field.errors %}
+                <div class="text-red-500 text-xs">{{ error }}</div>
+                {% endfor %}
+            </div>
+        {% endfor %}
+        <div class="flex gap-2 mt-4">
+            <button type="submit" class="bg-blue-600 text-white px-5 py-2 rounded hover:bg-blue-500 transition shadow">Save</button>
+            <a href="{% url 'account-list' %}" class="px-5 py-2 rounded border border-gray-300 text-gray-800 hover:bg-gray-100 transition">Cancel</a>
+        </div>
+    </form>
+</div>
+{% endblock %}

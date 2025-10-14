@@ -1,29 +1,64 @@
 {% extends "base.html" %}
 {% block title %}Goal Form{% endblock %}
 {% block content %}
-<div class="row justify-content-center">
-    <div class="col-md-7 col-lg-6">
-        <div class="card shadow-sm">
-            <div class="card-header bg-success text-white">
-                <h4 class="mb-0">
-                    <i class="fa-solid fa-bullseye"></i>
+<div class="flex justify-center mt-8">
+    <div class="w-full max-w-xl">
+        <div class="bg-white rounded-lg shadow p-6">
+            <div class="mb-6 flex items-center gap-2">
+                <i class="fa-solid fa-bullseye text-green-600 text-xl"></i>
+                <h4 class="text-xl font-bold text-gray-800">
                     {% if object %}Edit Goal{% else %}Create Goal{% endif %}
                 </h4>
             </div>
-            <div class="card-body">
-                <form method="post" novalidate>
-                    {% csrf_token %}
-                    {{ form.as_p }}
-                    <div class="d-flex justify-content-between mt-3">
-                        <button type="submit" class="btn btn-success">
-                            <i class="fa-solid fa-save"></i> Save
-                        </button>
-                        <a href="{% url 'goal-list' %}" class="btn btn-secondary">
-                            <i class="fa-solid fa-arrow-left"></i> Cancel
-                        </a>
-                    </div>
-                </form>
-            </div>
+            <form method="post" novalidate>
+                {% csrf_token %}
+                <div class="mb-4">
+                    <label for="{{ form.account.id_for_label }}" class="block text-gray-700 font-medium mb-2">Account</label>
+                    {{ form.account }}
+                    {% if form.account.help_text %}
+                    <p class="text-gray-500 text-xs">{{ form.account.help_text }}</p>
+                    {% endif %}
+                    {% for error in form.account.errors %}
+                    <div class="text-red-500 text-xs">{{ error }}</div>
+                    {% endfor %}
+                </div>
+                <div class="mb-4">
+                    <label for="{{ form.name.id_for_label }}" class="block text-gray-700 font-medium mb-2">Goal Name</label>
+                    {{ form.name }}
+                    {% for error in form.name.errors %}
+                    <div class="text-red-500 text-xs">{{ error }}</div>
+                    {% endfor %}
+                </div>
+                <div class="mb-4">
+                    <label for="{{ form.target_amount.id_for_label }}" class="block text-gray-700 font-medium mb-2">Target Amount</label>
+                    {{ form.target_amount }}
+                    {% for error in form.target_amount.errors %}
+                    <div class="text-red-500 text-xs">{{ error }}</div>
+                    {% endfor %}
+                </div>
+                <div class="mb-4">
+                    <label for="{{ form.current_amount.id_for_label }}" class="block text-gray-700 font-medium mb-2">Current Amount</label>
+                    {{ form.current_amount }}
+                    {% for error in form.current_amount.errors %}
+                    <div class="text-red-500 text-xs">{{ error }}</div>
+                    {% endfor %}
+                </div>
+                <div class="mb-4">
+                    <label for="{{ form.deadline.id_for_label }}" class="block text-gray-700 font-medium mb-2">Deadline</label>
+                    {{ form.deadline }}
+                    {% for error in form.deadline.errors %}
+                    <div class="text-red-500 text-xs">{{ error }}</div>
+                    {% endfor %}
+                </div>
+                <div class="flex justify-between mt-6">
+                    <button type="submit" class="bg-green-600 text-white px-6 py-2 rounded hover:bg-green-500 transition flex items-center gap-2">
+                        <i class="fa-solid fa-save"></i> Save
+                    </button>
+                    <a href="{% url 'goal-list' %}" class="bg-gray-300 text-gray-800 px-6 py-2 rounded hover:bg-gray-400 transition flex items-center gap-2">
+                        <i class="fa-solid fa-arrow-left"></i> Cancel
+                    </a>
+                </div>
+            </form>
         </div>
     </div>
 </div>

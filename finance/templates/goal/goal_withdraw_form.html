@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% block title %}Withdraw from Goal: {{ goal.name }}{% endblock %}
+{% block content %}
+<div class="flex justify-center mt-8">
+    <div class="w-full max-w-md">
+        <div class="bg-white rounded-lg shadow p-8">
+            <div class="mb-6 flex items-center gap-2">
+                <i class="fa-solid fa-arrow-up text-red-600 text-xl"></i>
+                <h4 class="text-xl font-bold text-gray-800">
+                    Withdraw from Goal: {{ goal.name }}
+                </h4>
+            </div>
+            <form method="post" novalidate>
+                {% csrf_token %}
+                <div class="mb-4">
+                    <label for="id_amount" class="block text-gray-700 font-medium mb-2">Amount</label>
+                    {{ form.amount }}
+                    {% for error in form.amount.errors %}
+                    <div class="text-red-500 text-xs">{{ error }}</div>
+                    {% endfor %}
+                </div>
+                <div class="mb-4">
+                    <label for="id_description" class="block text-gray-700 font-medium mb-2">Description</label>
+                    {{ form.description }}
+                    {% for error in form.description.errors %}
+                    <div class="text-red-500 text-xs">{{ error }}</div>
+                    {% endfor %}
+                </div>
+                <div class="flex justify-between mt-6">
+                    <button type="submit" class="bg-red-600 text-white px-6 py-2 rounded hover:bg-red-500 transition flex items-center gap-2">
+                        <i class="fa-solid fa-arrow-up"></i> Withdraw
+                    </button>
+                    <a href="{% url 'goal-detail' goal.pk %}" class="bg-gray-300 text-gray-800 px-6 py-2 rounded hover:bg-gray-400 transition flex items-center gap-2">
+                        <i class="fa-solid fa-arrow-left"></i> Cancel
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -2,34 +2,32 @@ from django.urls import path
 from . import views
 
 urlpatterns = [
-
     path('', views.dashboard, name='dashboard'),
+    path('accounts/', views.account_list, name='account-list'),
+    path('accounts/create/', views.account_create, name='account-create'),
+    path('accounts/<int:pk>/', views.account_detail, name='account-detail'),
+    path('accounts/<int:pk>/update/', views.account_update, name='account-update'),
+    path('accounts/<int:pk>/delete/', views.account_delete, name='account-delete'),
 
-    # Goal URLs
-    path('goals/', views.GoalListView.as_view(), name='goal-list'),
-    path('goals/new/', views.GoalCreateView.as_view(), name='goal-create'),
-    path('goals/<int:pk>/', views.GoalDetailView.as_view(), name='goal-detail'),
-    path('goals/<int:pk>/edit/', views.GoalUpdateView.as_view(), name='goal-update'),
-    path('goals/<int:pk>/delete/', views.GoalDeleteView.as_view(), name='goal-delete'),
+    # Add these two for deposit and withdraw!
+    path('accounts/<int:pk>/deposit/', views.account_deposit, name='account_deposit'),
+    path('accounts/<int:pk>/withdraw/', views.account_withdraw, name='account_withdraw'),
+    
 
-    # Budget URLs
-    path('budgets/', views.BudgetListView.as_view(), name='budget-list'),
-    path('budgets/new/', views.BudgetCreateView.as_view(), name='budget-create'),
-    path('budgets/<int:pk>/', views.BudgetDetailView.as_view(), name='budget-detail'),
-    path('budgets/<int:pk>/edit/', views.BudgetUpdateView.as_view(), name='budget-update'),
-    path('budgets/<int:pk>/delete/', views.BudgetDeleteView.as_view(), name='budget-delete'),
+    path('goals/', views.goal_list, name='goal-list'),
+    path('goals/create/', views.goal_create, name='goal-create'),
+    path('goals/<int:pk>/', views.goal_detail, name='goal-detail'),
+    path('goals/<int:pk>/update/', views.goal_update, name='goal-update'),
+    path('goals/<int:pk>/delete/', views.goal_delete, name='goal-delete'),
 
-    # Transaction URLs
-    path('transactions/', views.TransactionListView.as_view(), name='transaction-list'),
-    path('transactions/new/', views.TransactionCreateView.as_view(), name='transaction-create'),
-    path('transactions/<int:pk>/', views.TransactionDetailView.as_view(), name='transaction-detail'),
-    path('transactions/<int:pk>/edit/', views.TransactionUpdateView.as_view(), name='transaction-update'),
-    path('transactions/<int:pk>/delete/', views.TransactionDeleteView.as_view(), name='transaction-delete'),
+    path('goals/<int:pk>/deposit/', views.goal_deposit, name='goal_deposit'),
+    path('goals/<int:pk>/withdraw/', views.goal_withdraw, name='goal_withdraw'),
 
-    # Category URLs
-    path('categories/', views.CategoryListView.as_view(), name='category-list'),
-    path('categories/new/', views.CategoryCreateView.as_view(), name='category-create'),
-    path('categories/<int:pk>/', views.CategoryDetailView.as_view(), name='category-detail'),
-    path('categories/<int:pk>/edit/', views.CategoryUpdateView.as_view(), name='category-update'),
-    path('categories/<int:pk>/delete/', views.CategoryDeleteView.as_view(), name='category-delete'),
+    path('transactions/', views.transaction_list, name='transaction-list'),
+    path('transactions/create/', views.transaction_create, name='transaction-create'),
+    path('transactions/<int:pk>/', views.transaction_detail, name='transaction-detail'),
+    path('transactions/<int:pk>/update/', views.transaction_update, name='transaction-update'),
+    path('transactions/<int:pk>/delete/', views.transaction_delete, name='transaction-delete'),
+
+    path('reports/', views.reports, name='reports'),
 ]

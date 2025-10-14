@@ -4,29 +4,32 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 from django import forms
 
-def signUp (request):
+def signUp(request):
     if request.method == 'POST':
         form = UserCreationForm(request.POST)
         if form.is_valid():
-            form.save()
+            user = form.save()
             username = form.cleaned_data['username']
-            password = form.cleaned_data['password1']
-            redirect('login')
-            messages.success(request, ('Registration successful!'))
-    else:
-
-        form = UserCreationForm()
-
-        context= {
-            'form':form,
-            'title': 'Register'
+            # password = form.cleaned_data['password1']  # Not needed here
+            messages.success(request, 'Registration successful! You can now login.')
+            return redirect('login')
+        else:
+            messages.error(request, 'Please correct the errors below.')
+        context = {
+            'form': form,
+            'title': 'Register',
         }
-
-    return render(request, 'registration/register.html', context)
-
+        return render(request, 'registration/register.html', context)
+    else:
+        form = UserCreationForm()
+        context = {
+            'form': form,
+            'title': 'Register',
+        }
+        return render(request, 'registration/register.html', context)
 
 class UserEditForm(forms.ModelForm):
-     class Meta:
+    class Meta:
         model = User
         fields = ['username', 'email']  # Add other fields as necessary
         widgets = {
@@ -41,11 +44,15 @@ def profile(request):
         form = UserEditForm(request.POST, instance=user)
         if form.is_valid():
             form.save()  # Save the updated user information
+            messages.success(request, 'Profile updated successfully.')
             return redirect('profile')  # Redirect to the profile page after saving
+        else:
+            messages.error(request, 'Please correct the errors below.')
     else:
         form = UserEditForm(instance=user)  # Pre-fill the form with the user's current information
 
     context = {
         'form': form,
+        'title': 'Profile',
     }
     return render(request, 'profile/profile.html', context)

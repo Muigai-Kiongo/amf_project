@@ -1,25 +1,39 @@
 {% extends "base.html" %}
+{% load humanize %}
 {% block title %}Delete Goal{% endblock %}
 {% block content %}
-<div class="row justify-content-center">
-    <div class="col-md-7 col-lg-6">
-        <div class="card shadow-sm border-danger mb-4">
-            <div class="card-header bg-danger text-white">
-                <h4 class="mb-0">
-                    <i class="fa-solid fa-trash"></i> Delete Goal
-                </h4>
+<div class="flex justify-center mt-8">
+    <div class="w-full max-w-xl">
+        <div class="bg-white rounded-lg shadow border-2 border-red-500 mb-8">
+            <div class="bg-red-600 text-white rounded-t-lg px-6 py-4 flex items-center gap-2">
+                <i class="fa-solid fa-trash text-xl"></i>
+                <h4 class="text-xl font-bold">Delete Goal</h4>
             </div>
-            <div class="card-body">
-                <p class="fs-5">
-                    <i class="fa-solid fa-exclamation-triangle text-warning"></i>
-                    Are you sure you want to delete <strong>{{ object.name }}</strong>?
+            <div class="px-6 py-5">
+                <p class="text-lg mb-4 flex items-center gap-2">
+                    <i class="fa-solid fa-exclamation-triangle text-yellow-400"></i>
+                    Are you sure you want to delete <strong>{{ goal.name }}</strong>?
                 </p>
+                <ul class="mb-6">
+                    <li class="mb-2">
+                        <span class="font-semibold text-gray-700">Target amount:</span>
+                        <span class="bg-blue-100 text-blue-700 px-3 py-1 rounded text-sm font-mono">{{ goal.target_amount|floatformat:2|intcomma }} KES</span>
+                    </li>
+                    <li class="mb-2">
+                        <span class="font-semibold text-gray-700">Current amount:</span>
+                        <span class="bg-teal-100 text-teal-700 px-3 py-1 rounded text-sm font-mono">{{ goal.current_amount|floatformat:2|intcomma }} KES</span>
+                    </li>
+                    <li>
+                        <span class="font-semibold text-gray-700">Deadline:</span>
+                        <span class="bg-gray-200 text-gray-800 px-3 py-1 rounded text-sm">{{ goal.deadline }}</span>
+                    </li>
+                </ul>
                 <form method="post">{% csrf_token %}
-                    <div class="d-flex justify-content-between">
-                        <button type="submit" class="btn btn-danger">
+                    <div class="flex justify-between mt-8">
+                        <button type="submit" class="bg-red-600 text-white px-6 py-2 rounded hover:bg-red-500 transition flex items-center gap-2">
                             <i class="fa-solid fa-trash"></i> Yes, delete
                         </button>
-                        <a href="{% url 'goal-list' %}" class="btn btn-secondary">
+                        <a href="{% url 'goal-list' %}" class="bg-gray-300 text-gray-800 px-6 py-2 rounded hover:bg-gray-400 transition flex items-center gap-2">
                             <i class="fa-solid fa-arrow-left"></i> Cancel
                         </a>
                     </div>

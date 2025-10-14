@@ -1,29 +1,38 @@
 {% extends "base.html" %}
 {% block title %}Transaction Form{% endblock %}
 {% block content %}
-<div class="row justify-content-center">
-    <div class="col-md-7 col-lg-6">
-        <div class="card shadow-sm">
-            <div class="card-header bg-info text-white">
-                <h4 class="mb-0">
-                    <i class="fa-solid fa-arrows-rotate"></i>
+<div class="flex justify-center mt-8">
+    <div class="w-full max-w-xl">
+        <div class="bg-white rounded-lg shadow p-6">
+            <div class="mb-6 flex items-center gap-2">
+                <i class="fa-solid fa-arrows-rotate text-blue-500 text-xl"></i>
+                <h4 class="text-xl font-bold text-gray-800">
                     {% if object %}Edit Transaction{% else %}Create Transaction{% endif %}
                 </h4>
             </div>
-            <div class="card-body">
-                <form method="post" novalidate>
-                    {% csrf_token %}
-                    {{ form.as_p }}
-                    <div class="d-flex justify-content-between mt-3">
-                        <button type="submit" class="btn btn-success">
-                            <i class="fa-solid fa-save"></i> Save
-                        </button>
-                        <a href="{% url 'transaction-list' %}" class="btn btn-secondary">
-                            <i class="fa-solid fa-arrow-left"></i> Cancel
-                        </a>
+            <form method="post" novalidate>
+                {% csrf_token %}
+                {% for field in form %}
+                    <div class="mb-4">
+                        <label for="{{ field.id_for_label }}" class="block text-gray-700 font-medium mb-2">{{ field.label }}</label>
+                        {{ field }}
+                        {% if field.help_text %}
+                        <p class="text-gray-500 text-xs">{{ field.help_text }}</p>
+                        {% endif %}
+                        {% for error in field.errors %}
+                        <div class="text-red-500 text-xs">{{ error }}</div>
+                        {% endfor %}
                     </div>
-                </form>
-            </div>
+                {% endfor %}
+                <div class="flex justify-between mt-6">
+                    <button type="submit" class="bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-500 transition flex items-center gap-2">
+                        <i class="fa-solid fa-save"></i> Save
+                    </button>
+                    <a href="{% url 'transaction-list' %}" class="bg-gray-300 text-gray-800 px-6 py-2 rounded hover:bg-gray-400 transition flex items-center gap-2">
+                        <i class="fa-solid fa-arrow-left"></i> Cancel
+                    </a>
+                </div>
+            </form>
         </div>
     </div>
 </div>
